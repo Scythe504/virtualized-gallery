@@ -33,7 +33,7 @@ export const VirtualGallery = ({
     return () => observer.disconnect()
   }, [])
 
-  const columns = containerWidth < 600 ? 1 : containerWidth < 1024 ? 2 : 3
+const columns = containerWidth < 600 ? 1 : containerWidth < 1024 ? 2 : 3
   const rowHeight = containerWidth / columns + GAP
   const rowCount = Math.ceil(photos.length / columns)
   const totalContentHeight = rowCount * rowHeight + (rowCount - 1) * GAP
