@@ -4,6 +4,7 @@ import { ImageCard } from "./image-card"
 import { Modal } from "./modal"
 import type { WorkerMessage } from "../worker/imageProcessor.worker"
 import { useWorker } from "../hooks/useWorker"
+import { PreviewImage } from "./preview-image"
 
 interface VirtualGalleryProps {
   photos: Photo[]
@@ -47,9 +48,10 @@ export const VirtualGallery = ({ photos, selectionMode }: VirtualGalleryProps) =
   }
 
   const columns = containerWidth < 600 ? 1 : containerWidth < 1024 ? 2 : 3
-  const rowHeight = containerWidth / columns + GAP
+  const itemWidth = (containerWidth - (columns - 1) * GAP) / columns
+  const rowHeight = itemWidth + GAP
   const rowCount = Math.ceil(photos.length / columns)
-  const totalContentHeight = rowCount * rowHeight + (rowCount - 1) * GAP
+  const totalContentHeight = rowCount > 0 ? rowCount * rowHeight - GAP : 0
 
   const startRow = Math.max(0, Math.floor(scrollTop / rowHeight) - OVERSCAN)
   const visibleRowCount = Math.ceil(containerHeight / rowHeight) + 2 * OVERSCAN
@@ -122,9 +124,9 @@ export const VirtualGallery = ({ photos, selectionMode }: VirtualGalleryProps) =
         <div className="fixed bottom-0 left-0 right-0 z-40 bg-zinc-900 border-t border-zinc-700 px-4 py-3 flex items-center justify-between">
           <span className="text-sm text-zinc-400">{selectedIds.size} images selected</span>
           <button className="px-4 py-2 bg-white text-black text-sm rounded-md hover:bg-zinc-200 transition-colors"
-            onClick={(e)=> {
+            onClick={(e) => {
               e.stopPropagation()
-              const p = photos.filter((photo)=> selectedIds.has(photo.id))
+              const p = photos.filter((photo) => selectedIds.has(photo.id))
 
               const message: WorkerMessage = {
                 photos: p,
@@ -141,11 +143,7 @@ export const VirtualGallery = ({ photos, selectionMode }: VirtualGalleryProps) =
 
       {selectedPhoto && (
         <Modal onClose={() => setSelectedPhoto(null)}>
-          <img
-            src={selectedPhoto.download_url}
-            alt={selectedPhoto.author}
-            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
-          />
+          <PreviewImage photo={selectedPhoto} />
         </Modal>
       )}
     </>

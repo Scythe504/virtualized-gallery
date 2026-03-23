@@ -1,5 +1,5 @@
 import type { Photo } from "../hooks/useFetchPhotos";
-import { applyWatermark } from "../utills/sharedWatermark";
+import { applyWatermark } from "../utils/sharedWatermark";
 
 export interface WorkerMessage {
   photo?: Photo;
