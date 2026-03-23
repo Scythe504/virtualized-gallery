@@ -84,3 +84,12 @@ npm run dev
 | Variable | Description |
 |---|---|
 | `VITE_PICSUM_API_URL` | Picsum Photos base URL |
+
+#### Improvements from implementing Caching (IndexedDB, in-memory Image Blob)
+
+- API Response Fetch Time:
+    - Before: The api response took around 2 seconds, which caused the user to look at a loading spinner for a while.
+    - After: Image Skeleton with the metadata (Author) loads instantly with images loading relatively fast as compared to when there is no Cache hit.
+- Scrolling Images UX Enhancement:
+    - Before: Once the user scrolled past the images that got into the DOM they would get unmounted and once they mount again the images have to be repainted causing a flashing effect on the image card.
+    - After: Images are cached in-memory as the user encounters them, even after remounting the image doesn't have to be repainted, causing no black/white flashing on the image card.
